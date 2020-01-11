@@ -1,0 +1,32 @@
+{
+  "name": "__be",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/lifeEXP/life-exp-api.git",
+  "author": "AustinLynes <austinlynes94@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "server":"nodemon index.js"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.7",
+    "cors": "^2.8.5",
+    "cross-env": "^6.0.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.21.2",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.20.7",
+    "knex-cleaner": "^1.3.0",
+    "morgan": "^1.9.1",
+    "sqlite3": "^4.1.1"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.2",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
