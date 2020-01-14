@@ -18,20 +18,24 @@ async function addExp(info_owner, exp_amount) {
                 return ((100 + (exp_to_lvl_up / 5)) * cur_lvl)
             }
 
-
-            if (_info.exp + exp_amount >= _info.exp_to_lvl_up) {
+            const amm_req = _info.exp + exp_amount 
+            let rem = 0
+            if ( amm_req >= _info.exp_to_lvl_up) {
+                console.log(amm_req)
                 console.log('LEVEL UP!')
                 level_up = true
+                rem = amm_req - _info.exp_to_lvl_up 
             }
 
-            console.log('previous exp: ', _info.exp)
             const newExp = {
                 ..._info,
-                exp: level_up ? 0 : _info.exp + exp_amount,
+                exp: level_up ? 0 + amm_req: _info.exp + exp_amount,
                 level: level_up ? _info.level + 1 : _info.level,
                 exp_to_lvl_up: level_up ? Math.floor(exp_requiredToLVL(_info.exp_to_lvl_up, _info.level)) : _info.exp_to_lvl_up
 
             }
+            console.log(':: exp: ', newExp.exp)
+            console.log('::: ', newExp.exp)
          
             level_up = false
             return db('user_information').update(newExp)

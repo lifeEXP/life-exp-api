@@ -5,20 +5,39 @@ const Users = require('../../models/auth/auth-model')
 const bcrypt = require('bcrypt')
 const generateToken = require('../../util/generateToken')
 const Infos = require('../../models/user/user-model')
-router.get('/users/all/debug', (req, res) => {
-    Users.find()
-        .then((_user) => {
-            if (!_user) {
-                res.status(404).json({ meessege: 'Couldn\'t Do that.... sorry try again' })
 
-            } else {
+router.get('/users', (req, res) => {
+    console.log(req.query)
+    const { username, email } = req.query
+    if (!username && !email) {
+        Users.find()
+            .then((_user) => {
+                if (!_user) {
+                    res.status(404).json({ meessege: 'Couldn\'t Do that.... sorry try again' })
 
-                res.status(200).json({ _user })
-            }
-        })
-        .catch((_err) => {
-            res.status(500).json({ messege: 'an error has occurred please contact the author', _err })
-        })
+                } else {
+
+                    res.status(200).json({ _user })
+                }
+            })
+            .catch((_err) => {
+                res.status(500).json({ messege: 'an error has occurred please contact the author', _err })
+            })
+    } else {
+        Users.findBy(username || email)
+            .then((_user) => {
+                if (!_user) {
+                    res.status(404).json({ meessege: 'Couldn\'t Do that.... sorry try again' })
+
+                } else {
+
+                    res.status(200).json({ _user })
+                }
+            })
+            .catch((_err) => {
+                res.status(500).json({ messege: 'an error has occurred please contact the author', _err })
+            })
+    }
 })
 
 router.post('/login', (req, res) => {
