@@ -22,8 +22,8 @@ router.get('/users/all/debug', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-    const { email, username, password } = req.body
-    Users.findBy(username || email)
+    const { username, password } = req.body
+    Users.findBy(username)
         .then((_user) => {
             if (_user && bcrypt.compareSync(password, _user.password)) {
                 const token = generateToken(_user)
