@@ -10,9 +10,13 @@ module.exports = {
 }
 
 //finds all users in the database...
-//IS_SENSITIVE --- !!! DO NOT USE FOR AUTH
 function find() {
-    return db('user').select('id', 'username', 'email', 'EXP')
+    return db('user as u')
+        .join('user_information as i', 'i.info_owner', '=', 'u.username')
+        .select(
+            'u.id', 'u.username', 'u.email',
+            'i.level', 'i.exp','i.exp_to_lvl_up',
+        )
 }
 //finds user by either username or email
 //use for auth 
