@@ -11,6 +11,10 @@ server.use(helmet())
 server.use(morgan('combined'))
 server.use(express.json())
 
+server.get('/', (req,res)=>{
+    res.send('WELCOME')
+})
+
 server.use('/auth', authRotuer)
 server.use('/api', auth, expenseRouter)
 
