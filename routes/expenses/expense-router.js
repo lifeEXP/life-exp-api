@@ -3,26 +3,16 @@ const router = express.Router()
 const Expenses = require('../../models/expense/expense-model')
 const Users = require('../../models/user/user-model')
 
-//get all expenses...
-router.get('/expenses/all', (req, res) => {
-    Expenses.find()
-        .then(_exp => {
-            res.status(200).json(_exp)
-        })
-        .catch(_err => {
-            res.status(500).json({ messege: 'sorry something went wrong boss..' })
-        })
-})
-
 //get all expenses by username
-router.get('/:username/expenses', (req, res) => {
-    const { username } = req.params
+router.get('/', (req, res) => {
+     const { username } = req.user
+    console.log(username)
     Expenses.findBy(username)
         .then((_exp) => {
             if (_exp) {
                 res.status(200).json(_exp)
             } else {
-                res.status(403).json({ messege: 'something went wrong..' })
+                res.status(404).json({ messege: 'That User Doesnt Exist...' })
             }
         }).catch((_err) => {
             res.status(500).json({ messege: 'sorry something went wrong boss..' })
@@ -30,8 +20,10 @@ router.get('/:username/expenses', (req, res) => {
 })
 
 //get single expense by id
-router.get('/:username/expenses/current/:id', (req, res) => {
-    const { id, username } = req.params
+router.get('/:id', (req, res) => {
+    const { id} = req.params
+     const { username } = req.user
+
     console.log(id)
     Expenses.findBy(username)
         .then(() => {
@@ -54,8 +46,9 @@ router.get('/:username/expenses/current/:id', (req, res) => {
 
 
 //add an expense
-router.post('/:username/expenses/add', (req, res) => {
-    const { username } = req.params
+router.post('/add', (req, res) => {
+     const { username } = req.user
+
     let expense = req.body
     expense = {
         ...expense,
@@ -73,25 +66,10 @@ router.post('/:username/expenses/add', (req, res) => {
             res.status(500).json({ _err })
         })
 })
-// ************************* THIS NEEDS TO BE REFACTORED TO ITS OWN AREA
-router.post('/:username/addEXP', (req, res) => {
-    const { username } = req.params
-    const { exp } = req.body
-    Users.addExp(username, exp)
-        .then((_exp) => {
-            if (!_exp) {
-                res.status(400).json({ messege: 'an error has occoured adding expense... please wait and try again later' })
-            } else {
-                res.status(200).json({_exp })
-            }
-        }).catch((_err) => {
-            console.log(_err)
-            res.status(500).json({ _err })
-        })
-})
+
 
 //delete an expense
-router.delete('/:username/expenses/delete/:id', (req, res) => {
+router.delete('/delete/:id', (req, res) => {
     const { id } = req.params
     Expenses.remove(id)
         .then((_exp) => {
@@ -106,8 +84,10 @@ router.delete('/:username/expenses/delete/:id', (req, res) => {
         })
 })
 //update an expense
-router.put('/:username/expenses/update/:id', (req, res) => {
-    const { id, username } = req.params
+router.put('/update/:id', (req, res) => {
+     const { username } = req.user
+
+    const { id } = req.params
     let changes = req.body
     changes = {
         ...changes,

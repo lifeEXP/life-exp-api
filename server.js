@@ -5,7 +5,10 @@ const morgan = require('morgan')
 const helmet = require('helmet')
 
 const authRotuer = require('./routes/auth/auth-router')
-const expenseRouter = require('./routes/expenses/expense-router')
+const userRouter = require('./routes/user/user-router')
+
+const isAuthorized = require('./middleware/isAuthorized')
+
 server.use(cors())
 server.use(helmet())
 server.use(morgan('combined'))
@@ -13,28 +16,11 @@ server.use(express.json())
 
 
 server.get('/', (req,res)=>{
-   
     res.send('WELCOME')
 })
 
 server.use('/auth', authRotuer)
-server.use('/api', auth, expenseRouter)
+server.use('/api/users', isAuthorized, userRouter)
 
-const jwt = require('jsonwebtoken')
-const secrets = require('./config/secrets')
-function auth(req, res, next) {
-    const { authorization } = req.headers
-    if(authorization){
-        jwt.verify(authorization, secrets.jwtSecret, (err, decodedToken)=>{
-            if(err){
-                res.status(401).json({messege:'couldn\'t be authorized at the time.. please try again later..'})
-            }else{                
-                next()
-            }
-        })
-    }else{
-        res.status(403).json({messege:'Log in!'})
 
-    }
-}
 module.exports = server

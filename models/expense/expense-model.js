@@ -13,14 +13,16 @@ function find() {
 function findBy(owner) {
     return db('expense as e')
     .where({ owner })
-    .select('e.id','e.name', 'e.payment','e.description', 'e.owner')
+    .select('e.id','e.name', 'e.payment','e.description','e.payment_frequency')
 }
 
 //returns the select expense for a better look at it later or for updating..
 //or for returning the given updated item to add it back to store...
 function findById(id) {
-    return db('expense').where({ id }).first()
+    return db('expense as e').where({ id }).first()
+    .select('e.id','e.name', 'e.payment','e.description','e.payment_frequency')
 }
+//TO DO :: check to see if theres a times payed in DB [ ]
 
 //adds and returns the item.. to simplfy the front end calculations and state Management
 async function add(expense) {

@@ -15,17 +15,22 @@ function find() {
         .join('user_information as i', 'i.info_owner', '=', 'u.username')
         .select(
             'u.id', 'u.username', 'u.email',
-            'i.level', 'i.exp','i.exp_to_lvl_up',
+            'i.level', 'i.exp', 'i.exp_to_lvl_up',
         )
 }
 //finds user by either username or email
 //use for auth 
 function findBy(filter) {
-    return db('user').where(function () {
+    return db('user as u').where(function () {
         this
             .where({ username: filter })
             .orWhere({ email: filter })
     }).first()
+    .join('user_information as i', 'i.info_owner', '=', 'u.username')
+    .select(
+        'u.id', 'u.username', 'u.email', 'u.password',
+        'i.level', 'i.exp', 'i.exp_to_lvl_up',
+    )
 }
 
 function findById(id) {
